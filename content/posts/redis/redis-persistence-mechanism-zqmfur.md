@@ -59,7 +59,7 @@ def BGSAVE():
 
 其中执行fork()创建子进程的时候会有短暂的阻塞
 
-​![image](assets/image-20230116181340-b6hx6au.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116181340-b6hx6au.png)​
 
 #### SAVE命令执行时的服务器状态
 
@@ -167,13 +167,13 @@ def serverCron():
 
 不过，当父进程或者子进程在向这个内存发起写操作时，CPU 就会触发**写保护中断**，这个写保护中断是由于违反权限导致的，然后操作系统会在「写保护中断处理函数」里进行**物理内存的复制**，并重新设置其内存映射关系，将父子进程的内存读写权限设置为**可读写**，最后才会对内存进行写操作
 
-​![image](assets/image-20230116160431-snb0bkk.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116160431-snb0bkk.png)​
 
 **只有在发生修改内存数据的情况时，物理内存才会被复制一份。**
 
 这样是为了防止 fork 创建子进程时，由于物理内存数据的复制时间过长而导致父进程长时间阻塞的问题。
 
-​![image](assets/image-20230116160458-hifyfmc.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116160458-hifyfmc.png)​
 
 当然，操作系统复制父进程页表的时候，父进程也是阻塞中的，不过页表的大小相比实际的物理内存小很多，所以通常复制页表的过程是比较快的。
 
@@ -206,13 +206,13 @@ def serverCron():
 
 AOF持久化是通过保存Redis服务器所执行的**写命令**来记录数据库状态的。
 
-​![image](assets/image-20230116161120-j12y876.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116161120-j12y876.png)​
 
 ## 开启AOF持久化
 
 在 Redis 中 AOF 持久化 功能默认是不开启的，需要我们修改 `redis.conf`​ 配置文件中的以下参数：
 
-​![image](assets/image-20230116161225-z4t8o3q.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116161225-z4t8o3q.png)​
 
 ## AOF持久化过程
 
@@ -220,7 +220,7 @@ AOF持久化功能的实现可以分为**命令追加**、**文件写入**、**�
 
 > Redis是“写后”日志，Redis先执行命令，把数据写入内存，然后才记录日志。日志里记录的是Redis收到的每一条命令，这些命令是以文本形式保存。PS: 大多数的数据库采用的是写前日志（WAL），例如MySQL，通过写前日志和两阶段提交，实现数据和逻辑的一致性。
 
-​![image](assets/image-20230413144927-rdjembx.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230413144927-rdjembx.png)​
 
 ### 命令追加
 
@@ -296,17 +296,17 @@ OK
 
 这个阶段服务器进程会处理这三个操作
 
-​![image](assets/image-20230116163259-b1mi258.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116163259-b1mi258.png)​
 
 1. 执行客户端的命令
 2. 将执行后的写命令append入aof_buf中
 3. 将执行后的写命令append到aof_rewrite_buf中
 
-​![image](assets/image-20230116163259-b1mi258.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116163259-b1mi258.png)​
 
 当进行 AOF持久化的时候，对于 aof_buf 中的数据需要写入并同步到 appendonly.aof 文件中
 
-​![image](assets/image-20230116164105-sa8u44c.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116164105-sa8u44c.png)​
 
 ##### 三种写回策略
 
@@ -327,7 +327,7 @@ def evenloop():
 |everysec|将 aof_buf 缓冲区中的所有内容写入并同步到 AOF 文件中，如果上次同步 AOF 文件的时间距离现在超过 1 秒钟，那么会再次对 AOF 文件进行同步。 （安全，性能较好）|
 |no|将 aof_buf 缓冲区中的所有内容写入并同步到 AOF 文件中，但不对 AOF 文件进行同步，何时进行同步一般有操作系统来决定。（一般为 30 秒，不安全，性能最好）|
 
-​![image](assets/image-20230116164404-zs0e8xz.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116164404-zs0e8xz.png)​
 
 在**概念**中我们谈到
 
@@ -337,7 +337,7 @@ def evenloop():
 
 当应用程序向文件写入数据时，内核通常先将数据复制到内核缓冲区中(写入)，然后排入队列，然后由内核决定何时写入硬盘(同步)。
 
-​![image](assets/image-20230116164627-z913ra4.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116164627-z913ra4.png)​
 
 如果想要应用程序向文件写入数据后，能立马将数据同步到硬盘，就可以调用 `fsync()`​​ 函数，这样内核就会将内核缓冲区的数据直接写入到硬盘，[等到]()硬盘写操作完成后，该函数才会返回。
 
@@ -365,7 +365,7 @@ AOF 重写机制是在重写时，读取当前数据库中的所有键值对，�
 
 举个例子，在没有使用重写机制前，假设前后执行了「*set name xiaolin*」和「*set name xiaolincoding*」这两个命令的话，就会将这两个命令记录到 AOF 文件。
 
-​![image](assets/image-20230116165141-csa8gdn.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116165141-csa8gdn.png)​
 
 但是**在使用重写机制后，就会读取 name 最新的 value（键值对） ，然后用一条 「set name xiaolincoding」命令记录到新的 AOF 文件**，之前的第一个命令就没有必要记录了，因为它属于「历史」命令，没有作用了。这样一来，一个键值对在重写日志中只用一条命令就行了。
 
@@ -384,7 +384,7 @@ AOF 重写机制是在重写时，读取当前数据库中的所有键值对，�
 
 主进程在通过 `fork`​ 系统调用生成 bgrewriteaof 子进程时，操作系统会把主进程的「**页表**」复制一份给子进程，这个页表记录着虚拟地址和物理地址映射关系，而不会复制物理内存，也就是说，两者的虚拟空间不同，但其对应的物理空间是同一个。
 
-​![image](assets/image-20230116160431-snb0bkk.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116160431-snb0bkk.png)​
 
 这样一来，子进程就共享了父进程的物理内存数据了，这样能够**节约物理内存资源**，页表对应的页表项的属性会标记该物理内存的权限为**只读**。
 
@@ -404,7 +404,7 @@ AOF 重写机制是在重写时，读取当前数据库中的所有键值对，�
 
 在重写 AOF 期间，当 Redis 执行完一个写命令之后，它会**同时将这个写命令写入到 「AOF 缓冲区」和 「AOF 重写缓冲区」** 。
 
-​![image](assets/image-20230116171122-l2lv5mz.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116171122-l2lv5mz.png)​
 
 也就是说，在 bgrewriteaof 子进程执行 AOF 重写期间，主进程需要执行以下三个工作:
 
@@ -461,7 +461,7 @@ aof-use-rdb-preamble yes
 
 也就是说，使用了混合持久化，AOF 文件的**前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据**。
 
-​![image](assets/image-20230116172246-b5kv9im.png)​
+​![image](https://xducodert-blog.oss-cn-chengdu.aliyuncs.com/test/image-20230116172246-b5kv9im.png)​
 
 优点：
 
