@@ -1,6 +1,7 @@
 ---
 author: parkso
 title: Redis持久化机制
+category: 技术
 slug: redis-persistence-mechanism-zqmfur
 url: /post/redis-persistence-mechanism-zqmfur.html
 date: '2023-01-16 14:40:51+08:00'
