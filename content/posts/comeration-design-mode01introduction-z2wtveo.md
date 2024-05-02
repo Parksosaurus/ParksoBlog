@@ -14,7 +14,7 @@ isCJKLanguage: true
 keywords: 设计模式
 ---
 
-# 纵览设计模式-01-导论
+# 总览设计模式-01-导论
 
 ## 概述
 
