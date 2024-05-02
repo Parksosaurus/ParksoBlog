@@ -1,11 +1,17 @@
 ---
+author: parkso
 title: 纵览设计模式-01-导论
 slug: comeration-design-mode01introduction-z2wtveo
+categories:
+  - CS技术
+tags:
+  - 设计模式
 url: /post/comeration-design-mode01introduction-z2wtveo.html
 date: '2024-05-02 17:03:36+08:00'
 lastmod: '2024-05-02 17:41:18+08:00'
 toc: true
 isCJKLanguage: true
+keywords: 设计模式
 ---
 
 # 纵览设计模式-01-导论
